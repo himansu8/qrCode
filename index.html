@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Portfolio QR Code</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 400px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            text-align: center;
+            transform: translateY(-50px);
+            transition: all 0.3s ease;
+        }
+
+        .container:hover {
+            transform: translateY(0);
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #555;
+            margin: 15px 0;
+        }
+
+        img {
+            margin-top: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border: 2px solid #ddd;
+            padding: 10px;
+            background-color: #fff;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        button {
+            background-color: #28a745;
+            color: #fff;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        button:hover {
+            background-color: #218838;
+            transform: translateY(-2px);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="qrContainer">
+    <h1>Scan to visit My Portfolio</h1>
+    <p>Use your mobile phone to scan the QR code below to visit my portfolio. Explore my projects and let's connect!</p>
+    
+    <img src="http://localhost:8080/api/qrcode/generate" alt="Portfolio QR Code" width="200px">
+        
+    <div class="download-btn-wrapper">
+        <button id="downloadButton">Download Card as Image</button>
+    </div>
+</div>
+
+<!-- Include html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.0/html2canvas.min.js"></script>
+<script>
+    document.getElementById('downloadButton').addEventListener('click', function() {
+        const container = document.getElementById('qrContainer');
+        const downloadButton = document.getElementById('downloadButton');
+
+        // Hide the download button before capturing the image
+        downloadButton.style.display = 'none';
+
+        // Ensure the element exists and is visible
+        if (container) {
+            // Using html2canvas to capture the container
+            html2canvas(container, {
+                useCORS: true, // Enable cross-origin resource sharing for the QR image
+                onrendered: function(canvas) {
+                    const imgData = canvas.toDataURL('image/png'); // Convert canvas to image data
+                    
+                    // Create a link element to trigger download
+                    const link = document.createElement('a');
+                    link.href = imgData;
+                    link.download = 'portfolio_qrcode_card.png'; // Specify the download file name
+                    link.click(); // Trigger the download
+                }
+            }).then(function() {
+                // Show the download button again after the image is captured and downloaded
+                downloadButton.style.display = 'inline-block';
+            });
+        } else {
+            alert('Card element not found.');
+        }
+    });
+</script>
+
+</body>
+</html>
